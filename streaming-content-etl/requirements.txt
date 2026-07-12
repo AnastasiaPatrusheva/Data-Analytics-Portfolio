@@ -1,0 +1,7 @@
+# для локального запуска пайплайна (без Docker) и тестов
+pyspark>=3.5
+clickhouse-connect>=0.7
+pandas>=2.0
+pyarrow>=15.0
+pytest>=8.0
+# Airflow — в контейнере (см. Dockerfile / docker-compose.yml)

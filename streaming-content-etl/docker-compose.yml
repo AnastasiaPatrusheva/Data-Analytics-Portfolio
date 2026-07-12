@@ -1,0 +1,78 @@
+# Все секреты берутся из .env (см. .env.example). В репозитории паролей нет.
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.3
+    container_name: sce-clickhouse
+    environment:
+      # пароль пользователя etl подставляется в users.d через from_env
+      CH_PASSWORD: ${CH_PASSWORD:?не задан CH_PASSWORD — скопируйте .env.example в .env}
+    ports:
+      - "8123:8123"   # HTTP (clickhouse-connect)
+      - "9000:9000"   # native
+    ulimits:
+      nofile: { soft: 262144, hard: 262144 }
+    volumes:
+      # именованный volume, а не папка на хосте: bind-mount с Windows/NTFS
+      # ломает ClickHouse (filesystem error: Permission denied при rename)
+      - ch_data:/var/lib/clickhouse
+      - ./docker/clickhouse-users.xml:/etc/clickhouse-server/users.d/etl-user.xml:ro
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--query", "SELECT 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  airflow:
+    build: .
+    container_name: sce-airflow
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+    command: standalone
+    ports:
+      - "8080:8080"   # Airflow UI (логин admin, пароль печатается в логах контейнера)
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      ETL_HOME: /opt/airflow/project
+      CH_HOST: clickhouse
+      CH_PORT: "8123"
+      CH_USER: ${CH_USER:-etl}
+      CH_PASSWORD: ${CH_PASSWORD:?не задан CH_PASSWORD}
+    volumes:
+      - ./:/opt/airflow/project        # весь проект (src, data, sql)
+      - ./dags:/opt/airflow/dags       # DAG-и
+
+  superset:
+    build:
+      context: .
+      dockerfile: Dockerfile.superset
+    container_name: sce-superset
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+    ports:
+      - "8088:8088"   # Superset UI (креды — из .env)
+    environment:
+      SUPERSET_SECRET_KEY: ${SUPERSET_SECRET_KEY:?не задан SUPERSET_SECRET_KEY}
+      SUPERSET_LOAD_EXAMPLES: "no"
+      FLASK_APP: superset
+      SUPERSET_ADMIN_USER: ${SUPERSET_ADMIN_USER:-admin}
+      SUPERSET_ADMIN_PASSWORD: ${SUPERSET_ADMIN_PASSWORD:?не задан SUPERSET_ADMIN_PASSWORD}
+      CH_HOST: clickhouse
+      CH_PORT: "8123"
+      CH_USER: ${CH_USER:-etl}
+      CH_PASSWORD: ${CH_PASSWORD:?не задан CH_PASSWORD}
+    volumes:
+      - superset_home:/app/superset_home
+      - ./docker:/app/scripts:ro
+    command: >
+      bash -c "superset db upgrade &&
+      (superset fab create-admin --username \"$$SUPERSET_ADMIN_USER\" --firstname Admin --lastname User
+        --email admin@example.com --password \"$$SUPERSET_ADMIN_PASSWORD\" || true) &&
+      superset init &&
+      (python /app/scripts/register_clickhouse.py || echo '[warn] регистрация ClickHouse не удалась') &&
+      superset run -h 0.0.0.0 -p 8088 --with-threads"
+
+volumes:
+  ch_data:
+  superset_home:

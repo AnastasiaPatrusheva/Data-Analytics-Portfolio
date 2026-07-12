@@ -1,0 +1,20 @@
+# данные, сырой слой и витрины — вне git
+data/*.csv
+data/raw/
+data/marts/
+
+# python / spark / pytest
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+spark-warehouse/
+*.crc
+.venv/
+venv/
+
+# docker / airflow / clickhouse
+ch_data/
+logs/
+standalone_admin_password.txt
+.env

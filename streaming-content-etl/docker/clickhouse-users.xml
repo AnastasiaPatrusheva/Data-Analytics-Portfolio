@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+  Пользователь для ETL-пайплайна.
+
+  Официальный образ clickhouse-server, если не заданы CLICKHOUSE_USER/CLICKHOUSE_PASSWORD,
+  отключает СЕТЕВОЙ доступ пользователю `default` (он остаётся доступен только локально).
+  Поэтому clickhouse-connect из контейнера Airflow не может подключиться по HTTP.
+
+  Здесь заводим отдельного пользователя `etl` с доступом по сети. Пароль берётся из
+  переменной окружения (from_env) — в репозитории его нет, значение задаётся в .env.
+-->
+<clickhouse>
+    <users>
+        <etl>
+            <password from_env="CH_PASSWORD"/>
+            <networks>
+                <ip>::/0</ip>
+            </networks>
+            <profile>default</profile>
+            <quota>default</quota>
+            <access_management>1</access_management>
+        </etl>
+    </users>
+</clickhouse>

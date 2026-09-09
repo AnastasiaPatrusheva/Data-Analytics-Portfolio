@@ -1,0 +1,57 @@
+table выживаемость
+	lineageTag: 95debafc-54c3-46ae-b1d3-79eac067b9c8
+
+	column день
+		dataType: double
+		lineageTag: 81b4f0df-aeae-4c70-b9d0-327c6e8054a6
+		summarizeBy: sum
+		sourceColumn: день
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column вероятность
+		dataType: double
+		lineageTag: 22e2dacb-6a4d-4f68-a269-2f1ad37229bf
+		summarizeBy: sum
+		sourceColumn: вероятность
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column группа
+		dataType: string
+		lineageTag: c4ebb31b-5268-4cff-855a-17106bdddacf
+		summarizeBy: none
+		sourceColumn: группа
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'месяцев с оформления' = ROUND('выживаемость'[день] / 30.44, 1)
+		lineageTag: e4e55bbc-bec3-4400-be5f-e80834355792
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition выживаемость = m
+		mode: import
+		source =
+				let
+				    Источник = Csv.Document(File.Contents("C:\Users\fiery\Desktop\Проекты\donor-analytics\powerbi_data\выживаемость.csv"),[Delimiter=",", Columns=3, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Повышенные заголовки" = Table.PromoteHeaders(Источник, [PromoteAllScalars=true]),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Повышенные заголовки",{{"день", type text}, {"вероятность", type text}, {"группа", type text}}),
+				    #"Измененный тип с языком" = Table.TransformColumnTypes(#"Измененный тип", {{"вероятность", type number}}, "en-US"),
+				    #"Измененный тип с языком1" = Table.TransformColumnTypes(#"Измененный тип с языком", {{"день", type number}}, "en-US"),
+				    #"Замененное значение" = Table.ReplaceValue(#"Измененный тип с языком1","эпоха 2019-2022","оформлены в 2019–2022",Replacer.ReplaceText,{"группа"}),
+				    #"Замененное значение1" = Table.ReplaceValue(#"Замененное значение","эпоха 2023-2026","оформлены в 2023–2026",Replacer.ReplaceText,{"группа"})
+				in
+				    #"Замененное значение1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Навигация
+

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "donor_dashboard"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "99c8bf10-afd6-4e74-bb98-061f8dbafd40"
+  }
+}

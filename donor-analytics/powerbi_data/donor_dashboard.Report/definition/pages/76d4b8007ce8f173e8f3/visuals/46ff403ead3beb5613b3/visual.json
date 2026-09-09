@@ -1,0 +1,404 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "46ff403ead3beb5613b3",
+  "position": {
+    "x": 20,
+    "y": 320,
+    "z": 2000,
+    "height": 385,
+    "width": 590,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "lineChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "PropertyVariationSource": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "подписки"
+                            }
+                          },
+                          "Name": "Изменение",
+                          "Property": "Дата/время создания"
+                        }
+                      },
+                      "Hierarchy": "Иерархия дат"
+                    }
+                  },
+                  "Level": "Год"
+                }
+              },
+              "queryRef": "подписки.Дата/время создания.Изменение.Иерархия дат.Год",
+              "nativeQueryRef": "Дата/время создания Год",
+              "active": true
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "PropertyVariationSource": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "подписки"
+                            }
+                          },
+                          "Name": "Изменение",
+                          "Property": "Дата/время создания"
+                        }
+                      },
+                      "Hierarchy": "Иерархия дат"
+                    }
+                  },
+                  "Level": "Квартал"
+                }
+              },
+              "queryRef": "подписки.Дата/время создания.Изменение.Иерархия дат.Квартал",
+              "nativeQueryRef": "Дата/время создания Квартал",
+              "active": true
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "PropertyVariationSource": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "подписки"
+                            }
+                          },
+                          "Name": "Изменение",
+                          "Property": "Дата/время создания"
+                        }
+                      },
+                      "Hierarchy": "Иерархия дат"
+                    }
+                  },
+                  "Level": "Месяц"
+                }
+              },
+              "queryRef": "подписки.Дата/время создания.Изменение.Иерархия дат.Месяц",
+              "nativeQueryRef": "Дата/время создания Месяц",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "подписки"
+                        }
+                      },
+                      "Property": "ID"
+                    }
+                  },
+                  "Function": 5
+                }
+              },
+              "queryRef": "CountNonNull(подписки.ID)",
+              "nativeQueryRef": "Количество ID"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "categoryAxis": [
+        {
+          "properties": {
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Новые подписки по месяцам'"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#0B0B0B'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "95ecaaffee5c71a115dd",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "подписки"
+                  }
+                },
+                "Property": "ID"
+              }
+            },
+            "Function": 5
+          }
+        },
+        "type": "Advanced",
+        "isHiddenInViewMode": true
+      },
+      {
+        "name": "3560d013cc075c9878b1",
+        "field": {
+          "HierarchyLevel": {
+            "Expression": {
+              "Hierarchy": {
+                "Expression": {
+                  "PropertyVariationSource": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "подписки"
+                      }
+                    },
+                    "Name": "Изменение",
+                    "Property": "Дата/время создания"
+                  }
+                },
+                "Hierarchy": "Иерархия дат"
+              }
+            },
+            "Level": "Год"
+          }
+        },
+        "type": "Categorical",
+        "isHiddenInViewMode": true,
+        "objects": {
+          "general": [
+            {
+              "properties": {
+                "isInvertedSelectionMode": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "62076b8cd7b6814d4ef9",
+        "field": {
+          "HierarchyLevel": {
+            "Expression": {
+              "Hierarchy": {
+                "Expression": {
+                  "PropertyVariationSource": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "подписки"
+                      }
+                    },
+                    "Name": "Изменение",
+                    "Property": "Дата/время создания"
+                  }
+                },
+                "Hierarchy": "Иерархия дат"
+              }
+            },
+            "Level": "Месяц"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "п",
+              "Entity": "подписки",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Not": {
+                  "Expression": {
+                    "StartsWith": {
+                      "Left": {
+                        "HierarchyLevel": {
+                          "Expression": {
+                            "Hierarchy": {
+                              "Expression": {
+                                "PropertyVariationSource": {
+                                  "Expression": {
+                                    "SourceRef": {
+                                      "Source": "п"
+                                    }
+                                  },
+                                  "Name": "Изменение",
+                                  "Property": "Дата/время создания"
+                                }
+                              },
+                              "Hierarchy": "Иерархия дат"
+                            }
+                          },
+                          "Level": "Месяц"
+                        }
+                      },
+                      "Right": {
+                        "Literal": {
+                          "Value": "'31.05.2026'"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "51970eae4e0945dd7f34",
+        "field": {
+          "HierarchyLevel": {
+            "Expression": {
+              "Hierarchy": {
+                "Expression": {
+                  "PropertyVariationSource": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "подписки"
+                      }
+                    },
+                    "Name": "Изменение",
+                    "Property": "Дата/время создания"
+                  }
+                },
+                "Hierarchy": "Иерархия дат"
+              }
+            },
+            "Level": "Квартал"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "3da7451ff744b8d9605f",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "подписки"
+              }
+            },
+            "Property": "Дата/время создания"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "п",
+              "Entity": "подписки",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Comparison": {
+                  "ComparisonKind": 3,
+                  "Left": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Source": "п"
+                        }
+                      },
+                      "Property": "Дата/время создания"
+                    }
+                  },
+                  "Right": {
+                    "DateSpan": {
+                      "Expression": {
+                        "Literal": {
+                          "Value": "datetime'2026-06-01T00:00:00'"
+                        }
+                      },
+                      "TimeUnit": 5
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      }
+    ]
+  }
+}

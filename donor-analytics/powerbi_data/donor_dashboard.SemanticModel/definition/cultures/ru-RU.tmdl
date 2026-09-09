@@ -1,0 +1,95 @@
+cultureInfo ru-RU
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "подписки.оформлено_подписок": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "подписки",
+			          "ConceptualProperty": "Оформлено подписок"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Оформлено": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "подписки.прошло_первое_списание": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "подписки",
+			          "ConceptualProperty": "Прошло первое списание"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "1-й платёж прошёл": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "подписки.прожили_полгода_и_больше": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "подписки",
+			          "ConceptualProperty": "Прожили полгода и больше"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Прожили 6+ мес.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "подписки.живы_сейчас": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "подписки",
+			          "ConceptualProperty": "Живы сейчас"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Активны сейчас": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

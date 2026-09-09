@@ -1,0 +1,72 @@
+table когорты
+	lineageTag: c51c2bfa-48a7-4657-9332-360c4460a922
+
+	measure Удержание =
+			
+			VAR CohortsWithData = DISTINCTCOUNT('когорты'[когорта])
+			VAR CohortsTotal = CALCULATE(DISTINCTCOUNT('когорты'[когорта]), REMOVEFILTERS('когорты'[месяц_жизни]))
+			VAR Weighted = DIVIDE(SUMX('когорты', 'когорты'[retention] * 'когорты'[подписок]), SUM('когорты'[подписок]))
+			RETURN
+			IF(CohortsWithData = CohortsTotal, Weighted)
+		formatString: 0.00
+		lineageTag: 3b7d54c1-0a9e-4a12-9c6d-2f81b0d4e5a7
+
+	column когорта
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4634155e-dac2-41be-9b29-6ce3dbe7711d
+		summarizeBy: none
+		sourceColumn: когорта
+
+		variation Изменение
+			isDefault
+			relationship: e28e7084-9f8e-445f-a141-ce24a4c51be2
+			defaultHierarchy: LocalDateTable_7a527221-a24c-438f-bc04-90b25ed7702c.'Иерархия дат'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column месяц_жизни
+		dataType: int64
+		formatString: 0
+		lineageTag: 71a7e1af-dc8c-44f3-8e19-c3502ffa4006
+		summarizeBy: sum
+		sourceColumn: месяц_жизни
+
+		annotation SummarizationSetBy = Automatic
+
+	column retention
+		dataType: double
+		lineageTag: a1878229-cd5d-4dee-9d2a-60fa8f7c33b3
+		summarizeBy: sum
+		sourceColumn: retention
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column подписок
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a1e9f22-4c88-4d17-b0a3-71c95e2d8b40
+		summarizeBy: sum
+		sourceColumn: подписок
+
+		annotation SummarizationSetBy = Automatic
+
+	partition когорты = m
+		mode: import
+		source =
+				let
+				    Источник = Csv.Document(File.Contents("C:\Users\fiery\Desktop\Проекты\donor-analytics\powerbi_data\когорты.csv"),[Delimiter=",", Columns=4, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Повышенные заголовки" = Table.PromoteHeaders(Источник, [PromoteAllScalars=true]),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Повышенные заголовки",{{"когорта", type date}, {"месяц_жизни", Int64.Type}, {"retention", type text}, {"подписок", Int64.Type}}),
+				    #"Измененный тип с языком" = Table.TransformColumnTypes(#"Измененный тип", {{"retention", type number}}, "en-US")
+				in
+				    #"Измененный тип с языком"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Навигация
+

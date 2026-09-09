@@ -1,0 +1,86 @@
+table донаторы
+	lineageTag: f848baa1-6f12-4fd8-bf14-13da3f534536
+
+	column 'ID плательщика'
+		dataType: string
+		lineageTag: 1dbbcffc-b0a3-44e8-892d-9420c7e0fed2
+		summarizeBy: none
+		sourceColumn: ID плательщика
+
+		annotation SummarizationSetBy = Automatic
+
+	column подписок
+		dataType: int64
+		formatString: 0
+		lineageTag: e1d9c409-8475-4917-9d9d-0fcea8f79e4b
+		summarizeBy: none
+		sourceColumn: подписок
+
+		annotation SummarizationSetBy = Automatic
+
+	column платежей
+		dataType: int64
+		formatString: 0
+		lineageTag: fbd7d143-f5f4-49c0-81fb-a41e8c7d7f60
+		summarizeBy: none
+		sourceColumn: платежей
+
+		annotation SummarizationSetBy = Automatic
+
+	column сбор
+		dataType: double
+		lineageTag: b18a8ec0-0634-4d5b-a974-cc3c9f301cd1
+		summarizeBy: none
+		sourceColumn: сбор
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column R
+		dataType: string
+		lineageTag: df560e37-4b47-4580-a704-61a5f5790f0f
+		summarizeBy: none
+		sourceColumn: R
+
+		annotation SummarizationSetBy = Automatic
+
+	column F
+		dataType: string
+		lineageTag: 3fe7096c-a23a-41e6-aeae-c994782a44a9
+		summarizeBy: none
+		sourceColumn: F
+
+		annotation SummarizationSetBy = Automatic
+
+	column M
+		dataType: string
+		lineageTag: 7e18e90d-09dd-4ea3-b695-414e773cad02
+		summarizeBy: none
+		sourceColumn: M
+
+		annotation SummarizationSetBy = Automatic
+
+	column класс
+		dataType: string
+		lineageTag: cbcc81da-01e5-4dae-a7fa-9d47def275f0
+		summarizeBy: none
+		sourceColumn: класс
+
+		annotation SummarizationSetBy = Automatic
+
+	partition донаторы = m
+		mode: import
+		source =
+				let
+				    Источник = Csv.Document(File.Contents("C:\Users\fiery\Desktop\Проекты\donor-analytics\powerbi_data\донаторы.csv"),[Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Повышенные заголовки" = Table.PromoteHeaders(Источник, [PromoteAllScalars=true]),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Повышенные заголовки",{{"ID плательщика", type text}, {"подписок", Int64.Type}, {"платежей", Int64.Type}, {"сбор", type text}, {"R", type text}, {"F", type text}, {"M", type text}, {"класс", type text}}),
+				    #"Измененный тип с языком" = Table.TransformColumnTypes(#"Измененный тип", {{"сбор", type number}}, "en-US")
+				in
+				    #"Измененный тип с языком"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Навигация
+

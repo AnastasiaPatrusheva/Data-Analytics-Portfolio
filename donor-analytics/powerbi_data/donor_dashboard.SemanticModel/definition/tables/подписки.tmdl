@@ -1,0 +1,160 @@
+table подписки
+	lineageTag: 8ffb835b-db69-4a95-ba8e-f438e3e676ab
+
+	measure 'Количество сбор плюс Количество сбор' =
+			
+			COUNTA('подписки'[сбор]) + COUNTA('подписки'[сбор])
+		formatString: 0
+		lineageTag: 17bbe4e4-d2c5-40c3-8364-f8d105961473
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "MathematicalAddition"
+				}
+
+		changedProperty = FormatString
+
+	measure Донаторов = DISTINCTCOUNT('подписки'[ID плательщика])
+		formatString: #,0
+		lineageTag: bff52684-adc6-4d93-9805-76829c35745c
+
+	measure 'Оформлено подписок' = COUNTROWS('подписки')
+		formatString: 0
+		lineageTag: be21019b-028a-410e-896a-ee399ce6b04f
+
+	measure 'Прошло первое списание' = CALCULATE(COUNTROWS('подписки'), 'подписки'[Кол-во платежей] > 0)
+		formatString: 0
+		lineageTag: 0e74c866-751e-4e64-b73f-a6ac040b2421
+
+	measure 'Живы сейчас' = CALCULATE(COUNTROWS('подписки'), 'подписки'[Статус] IN {"Активна", "Просрочена", "В ожидании"}, 'подписки'[Кол-во платежей] > 0)
+		formatString: 0
+		lineageTag: 4f38bd80-a282-46e8-b1e2-bd0b964694f1
+
+	measure 'Прожили полгода и больше' = CALCULATE(COUNTROWS('подписки'), 'подписки'[дней_жизни] >= 183, 'подписки'[Кол-во платежей] > 0)
+		formatString: 0
+		lineageTag: 93a9c561-31ef-417c-ae45-ebcf14f7faee
+
+	column ID
+		dataType: string
+		lineageTag: da0b03a5-c4b8-4e95-8e93-b67ff1d5bc0d
+		summarizeBy: none
+		sourceColumn: ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID плательщика'
+		dataType: string
+		lineageTag: c82eddd0-71b9-481e-b4a1-5350cac4dec6
+		summarizeBy: none
+		sourceColumn: ID плательщика
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Дата/время создания'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 45aa4627-6311-4bb1-83d9-edc4782cd8df
+		summarizeBy: none
+		sourceColumn: Дата/время создания
+
+		variation Изменение
+			isDefault
+			relationship: b4f29f85-b7f1-4c63-af26-a4b83df9fa4f
+			defaultHierarchy: LocalDateTable_f18b0cd8-69f0-47f7-8c66-5505d76c5128.'Иерархия дат'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Статус
+		dataType: string
+		lineageTag: 4849f79a-367a-48a3-bc55-8f264ed2638d
+		summarizeBy: none
+		sourceColumn: Статус
+
+		annotation SummarizationSetBy = Automatic
+
+	column Сумма
+		dataType: double
+		lineageTag: cf88ccf5-0066-468a-8e98-898080da7254
+		summarizeBy: sum
+		sourceColumn: Сумма
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Кол-во платежей'
+		dataType: int64
+		formatString: 0
+		lineageTag: 965f9322-c109-4f58-954c-99d41d5d66a9
+		summarizeBy: sum
+		sourceColumn: Кол-во платежей
+
+		annotation SummarizationSetBy = Automatic
+
+	column сбор
+		dataType: double
+		lineageTag: fd4e28b5-d808-4528-92af-9635113dd967
+		summarizeBy: sum
+		sourceColumn: сбор
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column дней_жизни
+		dataType: int64
+		formatString: 0
+		lineageTag: 6fb72078-bcad-4f53-868a-7799a4273458
+		summarizeBy: sum
+		sourceColumn: дней_жизни
+
+		annotation SummarizationSetBy = Automatic
+
+	column тип_оттока
+		dataType: string
+		lineageTag: 60dca5f7-a679-423b-907c-b6e7d2715899
+		summarizeBy: none
+		sourceColumn: тип_оттока
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_major
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 42ad8e81-dff5-4020-84f7-b6b27627d9d5
+		summarizeBy: none
+		sourceColumn: is_major
+
+		annotation SummarizationSetBy = Automatic
+
+	column конец_жизни
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 506d8db1-f4f7-454e-b289-099b13f44c2d
+		summarizeBy: none
+		sourceColumn: конец_жизни
+
+		variation Изменение
+			isDefault
+			relationship: f78d8344-ec83-4c9f-bb08-afd2b58fb4ec
+			defaultHierarchy: LocalDateTable_92aa0d86-0fcd-4021-9c22-db96390a35d5.'Иерархия дат'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition подписки = m
+		mode: import
+		source =
+				let
+				    Источник = Csv.Document(File.Contents("C:\Users\fiery\Desktop\Проекты\donor-analytics\powerbi_data\подписки.csv"),[Delimiter=",", Columns=11, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Повышенные заголовки" = Table.PromoteHeaders(Источник, [PromoteAllScalars=true]),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Повышенные заголовки",{{"ID", type text}, {"ID плательщика", type text}, {"Дата/время создания", type datetime}, {"Статус", type text}, {"Сумма", type text}, {"Кол-во платежей", Int64.Type}, {"сбор", type text}, {"дней_жизни", Int64.Type}, {"тип_оттока", type text}, {"is_major", type logical}, {"конец_жизни", type datetime}}),
+				    #"Измененный тип с языком" = Table.TransformColumnTypes(#"Измененный тип", {{"Сумма", type number}}, "en-US"),
+				    #"Измененный тип с языком1" = Table.TransformColumnTypes(#"Измененный тип с языком", {{"сбор", type number}}, "en-US")
+				in
+				    #"Измененный тип с языком1"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Навигация
+

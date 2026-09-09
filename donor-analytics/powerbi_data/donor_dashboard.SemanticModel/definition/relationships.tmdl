@@ -1,0 +1,19 @@
+relationship e28e7084-9f8e-445f-a141-ce24a4c51be2
+	joinOnDateBehavior: datePartOnly
+	fromColumn: когорты.когорта
+	toColumn: LocalDateTable_7a527221-a24c-438f-bc04-90b25ed7702c.Date
+
+relationship b4f29f85-b7f1-4c63-af26-a4b83df9fa4f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: подписки.'Дата/время создания'
+	toColumn: LocalDateTable_f18b0cd8-69f0-47f7-8c66-5505d76c5128.Date
+
+relationship f78d8344-ec83-4c9f-bb08-afd2b58fb4ec
+	joinOnDateBehavior: datePartOnly
+	fromColumn: подписки.конец_жизни
+	toColumn: LocalDateTable_92aa0d86-0fcd-4021-9c22-db96390a35d5.Date
+
+relationship AutoDetected_47463bdd-0418-445a-949e-af7d7e7b7083
+	fromColumn: подписки.'ID плательщика'
+	toColumn: донаторы.'ID плательщика'
+

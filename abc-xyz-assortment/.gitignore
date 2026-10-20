@@ -7,3 +7,5 @@
 # служебные папки
 .ipynb_checkpoints/
 *.docx
+# ревью ментора
+Ревью*.ipynb
